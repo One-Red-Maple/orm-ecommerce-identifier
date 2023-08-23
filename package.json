@@ -1,0 +1,40 @@
+{
+  "name": "ecomm-identifier",
+  "version": "1.0.6",
+  "description": "NPM package that can identify what ecomm-platform a site is hosted on by its HTML content or URL",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "ts-node src/index.ts"
+  },
+  "types": "dist/index.d.ts",
+  "type": "commonjs",
+  "author": "Zakary Loney",
+  "license": "ISC",
+  "keywords": [
+    "e-commerce",
+    "platform",
+    "identifier",
+    "detection",
+    "HTML"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.5.3",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/One-Red-Maple/orm-ecommerce-identifier.git"
+  },
+  "homepage": "https://github.com/One-Red-Maple/orm-ecommerce-identifier"
+}
