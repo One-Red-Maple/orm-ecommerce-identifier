@@ -12,28 +12,10 @@ console.log(platform);
 //{ name: 'WooCommerce', url: 'http://swiftoutside.com', success: true }
 ```
 
-JS:
-
-```javascript
-const { getPlatformByUrl } = require("ecomm-identifier");
-const url = "http://swiftoutside.com";
-const platform = await getPlatformByUrl(url);
-console.log(platform);
-//{ name: 'WooCommerce', url: 'http://swiftoutside.com', success: true }
-```
-
 Alternatively, you can import the `getPlatformByHtml` function and call it with an HTML string as the argument:
 
 ```typescript
 import { getPlatformByHtml } from "ecomm-identifier";
-const html = "<html><head><title>Swift Outside</title></head><body></body></html>";
-const platform = await getPlatformByHtml(html);
-console.log(platform);
-//{ name: 'WooCommerce', url: 'http://swiftoutside.com', success: true }
-```
-
-```javascript
-const { getPlatformByHtml } = require("ecomm-identifier");
 const html = "<html><head><title>Swift Outside</title></head><body></body></html>";
 const platform = await getPlatformByHtml(html);
 console.log(platform);
