@@ -71,6 +71,6 @@ module.exports = {
 };
 
 //For testing
-(async () => {
-  console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
-})();
+// (async () => {
+//   console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
+// })();
