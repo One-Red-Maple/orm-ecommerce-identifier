@@ -9,7 +9,7 @@ import { getPlatformByUrl } from "ecomm-identifier";
 const url = "http://swiftoutside.com";
 const platform = await getPlatformByUrl(url);
 console.log(platform);
-//{ name: 'WooCommerce', url: 'http://swiftoutside.com', success: true }
+//{ name: 'WooCommerce'}
 ```
 
 Alternatively, you can import the `getPlatformByHtml` function and call it with an HTML string as the argument:
@@ -19,7 +19,19 @@ import { getPlatformByHtml } from "ecomm-identifier";
 const html = "<html><head><title>Swift Outside</title></head><body></body></html>";
 const platform = await getPlatformByHtml(html);
 console.log(platform);
-//{ name: 'WooCommerce', url: 'http://swiftoutside.com', success: true }
+//{ name: 'WooCommerce'}
+```
+
+To save memory, you can also import the `getPlatformByCheerio` function and call it with a Cheerio object as the argument:
+
+```typescript
+import { getPlatformByCheerio } from "ecomm-identifier";
+import cheerio from "cheerio";
+const html = "<html><head><title>Swift Outside</title></head><body></body></html>";
+const $ = cheerio.load(html);
+const platform = await getPlatformByCheerio($);
+console.log(platform);
+//{ name: 'WooCommerce'}
 ```
 
 ## Supported Platforms
@@ -42,3 +54,7 @@ TODO:
 - [ ] Add more platforms
 - [ ] Add tests
 - [ ] Automate deployment
+
+```
+
+```
