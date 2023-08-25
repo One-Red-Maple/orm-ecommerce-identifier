@@ -54,7 +54,3 @@ TODO:
 - [ ] Add more platforms
 - [ ] Add tests
 - [ ] Automate deployment
-
-```
-
-```
