@@ -33,6 +33,9 @@ console.log(platform);
 - [x] Squarespace
 - [x] Wix
 - [x] WooCommerce
+- [x] Shoplaza
+- [x] Weebly
+- [x] PrestaShop
 
 TODO:
 

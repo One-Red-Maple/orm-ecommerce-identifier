@@ -8,4 +8,7 @@ export declare var platforms: {
     Squarespace: string;
     Wix: string;
     WooCommerce: string;
+    Shoplazza: string;
+    Weebly: string;
+    PrestaShop: string;
 };
