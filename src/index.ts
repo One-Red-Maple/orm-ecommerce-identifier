@@ -30,9 +30,7 @@ export async function getPlatformByHtml(html: string): Promise<platform> {
       resolve(data);
     } catch (error) {
       console.error("Error fetching HTML:", error);
-      reject({
-        success: false,
-      });
+      reject(error);
     }
   });
 }
@@ -55,9 +53,7 @@ export function getPlatformByCheerio(ch: any): Promise<platform> {
       resolve(data);
     } catch (error) {
       console.error("Error fetching HTML:", error);
-      reject({
-        success: false,
-      });
+      reject(error);
     }
   });
 }

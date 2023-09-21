@@ -41,9 +41,7 @@ async function getPlatformByUrl(url) {
         }
         catch (err) {
             console.error("Error fetching HTML:", err);
-            reject({
-                success: false,
-            });
+            reject(err);
         }
     });
 }
@@ -58,9 +56,7 @@ async function getPlatformByHtml(html) {
         }
         catch (error) {
             console.error("Error fetching HTML:", error);
-            reject({
-                success: false,
-            });
+            reject(error);
         }
     });
 }
@@ -84,9 +80,7 @@ function getPlatformByCheerio(ch) {
         }
         catch (error) {
             console.error("Error fetching HTML:", error);
-            reject({
-                success: false,
-            });
+            reject(error);
         }
     });
 }
