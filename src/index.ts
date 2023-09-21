@@ -16,9 +16,7 @@ export async function getPlatformByUrl(url: string): Promise<platform> {
       resolve(data);
     } catch (err) {
       console.error("Error fetching HTML:", err);
-      reject({
-        success: false,
-      });
+      reject(err);
     }
   });
 }
