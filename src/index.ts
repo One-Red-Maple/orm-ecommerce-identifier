@@ -1,70 +1,45 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { platforms } from "./platfroms";
+import { platforms } from "./platforms";
 
-interface platform {
+interface Platform {
   name: "Other" | "Bigcommerce" | "Ecwid" | "Lightspeed" | "Magento" | "Shopify" | "Square" | "Squarespace" | "Wix" | "WooCommerce" | "Shoplazza" | "Weebly" | "PrestaShop";
 }
 
-// Get platform by url
-export async function getPlatformByUrl(url: string): Promise<platform> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const response = await axios.get(url);
-      let html = response.data;
-      let data = await getPlatformByHtml(html);
-      resolve(data);
-    } catch (err) {
-      console.error("Error fetching HTML:", err);
-      reject(err);
-    }
-  });
-}
+class PlatformDetector {
+  private html: string;
 
-// Get platform by html
-export async function getPlatformByHtml(html: string): Promise<platform> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      var ch = cheerio.load(html);
-      let data = await getPlatformByCheerio(ch);
-      resolve(data);
-    } catch (error) {
-      console.error("Error fetching HTML:", error);
-      reject(error);
-    }
-  });
-}
+  constructor(html: string) {
+    this.html = html;
+  }
 
-export function getPlatformByCheerio(ch: any): Promise<platform> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let data: platform = {
-        name: "Other",
-      };
-      for (const key in platforms) {
-        if (Object.prototype.hasOwnProperty.call(platforms, key)) {
-          const element = platforms[key as keyof typeof platforms];
-          if (ch(element).length > 0) {
-            data.name = key as platform["name"];
-            break;
-          }
-        }
+  public detectPlatform(): Platform {
+    const ch = cheerio.load(this.html);
+
+    for (const platformName of Object.keys(platforms)) {
+      const selector: = platforms[platformName as keyof typeof platforms];
+      if (ch(selector).length > 0) {
+        return { name: platformName as Platform["name"] };
       }
-      resolve(data);
-    } catch (error) {
-      console.error("Error fetching HTML:", error);
-      reject(error);
     }
-  });
+
+    return { name: "Other" };
+  }
 }
 
-module.exports = {
-  getPlatformByUrl,
-  getPlatformByHtml,
-  getPlatformByCheerio,
-};
+export async function getPlatformByUrl(url: string): Promise<Platform> {
+  try {
+    const response = await axios.get(url);
+    const html = response.data;
+    const platformDetector = new PlatformDetector(html);
+    return platformDetector.detectPlatform();
+  } catch (error) {
+    console.error("Error fetching or parsing HTML:", error);
+    throw error;
+  }
+}
 
-//For testing
-// (async () => {
-//   console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
-// })();
+// For testing
+(async () => {
+  console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
+})();
