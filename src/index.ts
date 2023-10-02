@@ -17,7 +17,7 @@ class PlatformDetector {
     const ch = cheerio.load(this.html);
 
     for (const platformName of Object.keys(platforms)) {
-      const selector: = platforms[platformName as keyof typeof platforms];
+      const selector: any = platforms[platformName as keyof typeof platforms];
       if (ch(selector).length > 0) {
         return { name: platformName as Platform["name"] };
       }
@@ -39,7 +39,7 @@ export async function getPlatformByUrl(url: string): Promise<Platform> {
   }
 }
 
-// For testing
-(async () => {
-  console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
-})();
+// // For testing
+// (async () => {
+//   console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
+// })();
