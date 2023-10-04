@@ -1,4 +1,4 @@
-export declare var platforms: {
+export declare const platforms: {
     Bigcommerce: string;
     Ecwid: string;
     Lightspeed: string;
