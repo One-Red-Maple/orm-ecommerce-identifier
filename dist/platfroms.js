@@ -13,5 +13,5 @@ exports.platforms = {
     Shoplazza: `img[src^='https://cdn.shoplazza.com/']`,
     Weebly: `link[id='wsite-base-style'][rel='stylesheet'][type='text/css'][href^='//cdn2.editmysite.com']`,
     PrestaShop: `script:contains('var prestashop')`,
-    WooCommerce: `body.woocommerce .woocommerce-Price-amount.amount, style[id='woocommerce-inline-inline-css'][type='text/css']`
+    WooCommerce: `meta[name='generator'][content*='WooCommerce'], body.woocommerce .woocommerce-Price-amount.amount, style[id='woocommerce-inline-inline-css'][type='text/css']`
 };
