@@ -1,32 +1,29 @@
 import * as cheerio from "cheerio";
-import axios from "axios";  // Assuming you have Axios for fetching the URL content
+import axios from "axios";
 import { platforms } from "./platforms";
 
 interface Platform {
-  name: "Other" | "Bigcommerce" | "Ecwid" | "Lightspeed" | "Magento" | "Shopify" | "Square" | "Squarespace" | "Wix" | "WooCommerce" | "Shoplazza" | "Weebly" | "PrestaShop";
+  name: keyof typeof platforms | "Other";
 }
 
 class PlatformDetector {
-  private ch: any;
+  constructor(private ch: any) {}
 
-  constructor(ch: any) {
-    this.ch = ch;
-  }
-
-  public detectPlatform(): Platform {
-    for (const platformName of Object.keys(platforms)) {
-      const selector: any = platforms[platformName as keyof typeof platforms];
+  detectPlatform(): Platform {
+    for (const platformName in platforms) {
+      const selector = platforms[platformName as keyof typeof platforms];
       if (this.ch(selector).length > 0) {
-        return { name: platformName as Platform["name"] };
+        return { name: platformName as keyof typeof platforms };
       }
     }
-
     return { name: "Other" };
   }
 }
 
-export async function getPlatformByCheerio(ch: any): Promise<Platform> {
+//kept function name same as legacy to ensure compatibility
+export async function getPlatformByCheerio(input: string): Promise<Platform> {
   try {
+    const ch = typeof input === 'string' && input.startsWith("http") ? cheerio.load((await axios.get(input)).data) : cheerio.load(input);
     const platformDetector = new PlatformDetector(ch);
     return platformDetector.detectPlatform();
   } catch (error) {
@@ -35,29 +32,8 @@ export async function getPlatformByCheerio(ch: any): Promise<Platform> {
   }
 }
 
-export async function getPlatformByHTML(html: string): Promise<Platform> {
-  try {
-    const ch = cheerio.load(html);
-    return getPlatformByCheerio(ch);
-  } catch (error) {
-    console.error("Error getting platform from HTML:", error);
-    throw error;
-  }
-}
-
-export async function getPlatformByUrl(url: string): Promise<Platform> {
-  try {
-    const response = await axios.get(url);
-    const html = response.data;
-    const ch = cheerio.load(html);
-    return getPlatformByCheerio(ch);
-  } catch (error) {
-    console.error("Error getting platform from URL:", error);
-    throw error;
-  }
-}
 
 // For testing
 // (async () => {
-//   console.log(await getPlatformByUrl('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
+//   console.log(await getPlatformByCheerio('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
 // })();

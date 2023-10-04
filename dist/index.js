@@ -26,16 +26,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPlatformByUrl = exports.getPlatformByHTML = exports.getPlatformByCheerio = void 0;
+exports.getPlatformByCheerio = void 0;
 const cheerio = __importStar(require("cheerio"));
-const axios_1 = __importDefault(require("axios")); // Assuming you have Axios for fetching the URL content
+const axios_1 = __importDefault(require("axios"));
 const platforms_1 = require("./platforms");
 class PlatformDetector {
     constructor(ch) {
         this.ch = ch;
     }
     detectPlatform() {
-        for (const platformName of Object.keys(platforms_1.platforms)) {
+        for (const platformName in platforms_1.platforms) {
             const selector = platforms_1.platforms[platformName];
             if (this.ch(selector).length > 0) {
                 return { name: platformName };
@@ -44,8 +44,10 @@ class PlatformDetector {
         return { name: "Other" };
     }
 }
-async function getPlatformByCheerio(ch) {
+//kept function name same as legacy to ensure compatibility
+async function getPlatformByCheerio(input) {
     try {
+        const ch = typeof input === 'string' && input.startsWith("http") ? cheerio.load((await axios_1.default.get(input)).data) : cheerio.load(input);
         const platformDetector = new PlatformDetector(ch);
         return platformDetector.detectPlatform();
     }
@@ -55,31 +57,7 @@ async function getPlatformByCheerio(ch) {
     }
 }
 exports.getPlatformByCheerio = getPlatformByCheerio;
-async function getPlatformByHTML(html) {
-    try {
-        const ch = cheerio.load(html);
-        return getPlatformByCheerio(ch);
-    }
-    catch (error) {
-        console.error("Error getting platform from HTML:", error);
-        throw error;
-    }
-}
-exports.getPlatformByHTML = getPlatformByHTML;
-async function getPlatformByUrl(url) {
-    try {
-        const response = await axios_1.default.get(url);
-        const html = response.data;
-        const ch = cheerio.load(html);
-        return getPlatformByCheerio(ch);
-    }
-    catch (error) {
-        console.error("Error getting platform from URL:", error);
-        throw error;
-    }
-}
-exports.getPlatformByUrl = getPlatformByUrl;
 // For testing
 // (async () => {
-//   console.log(await getPlatformByUrl('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
+//   console.log(await getPlatformByCheerio('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
 // })();

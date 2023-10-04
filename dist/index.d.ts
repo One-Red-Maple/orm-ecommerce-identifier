@@ -1,7 +1,6 @@
+import { platforms } from "./platforms";
 interface Platform {
-    name: "Other" | "Bigcommerce" | "Ecwid" | "Lightspeed" | "Magento" | "Shopify" | "Square" | "Squarespace" | "Wix" | "WooCommerce" | "Shoplazza" | "Weebly" | "PrestaShop";
+    name: keyof typeof platforms | "Other";
 }
-export declare function getPlatformByCheerio(ch: any): Promise<Platform>;
-export declare function getPlatformByHTML(html: string): Promise<Platform>;
-export declare function getPlatformByUrl(url: string): Promise<Platform>;
+export declare function getPlatformByCheerio(input: string): Promise<Platform>;
 export {};
