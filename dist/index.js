@@ -26,71 +26,60 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPlatformByCheerio = exports.getPlatformByHtml = exports.getPlatformByUrl = void 0;
-const axios_1 = __importDefault(require("axios"));
+exports.getPlatformByUrl = exports.getPlatformByHTML = exports.getPlatformByCheerio = void 0;
 const cheerio = __importStar(require("cheerio"));
-const platfroms_1 = require("./platfroms");
-// Get platform by url
-async function getPlatformByUrl(url) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const response = await axios_1.default.get(url);
-            let html = response.data;
-            let data = await getPlatformByHtml(html);
-            resolve(data);
-        }
-        catch (err) {
-            console.error("Error fetching HTML:", err);
-            reject(err);
-        }
-    });
-}
-exports.getPlatformByUrl = getPlatformByUrl;
-// Get platform by html
-async function getPlatformByHtml(html) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            var ch = cheerio.load(html);
-            let data = await getPlatformByCheerio(ch);
-            resolve(data);
-        }
-        catch (error) {
-            console.error("Error fetching HTML:", error);
-            reject(error);
-        }
-    });
-}
-exports.getPlatformByHtml = getPlatformByHtml;
-function getPlatformByCheerio(ch) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let data = {
-                name: "Other",
-            };
-            for (const key in platfroms_1.platforms) {
-                if (Object.prototype.hasOwnProperty.call(platfroms_1.platforms, key)) {
-                    const element = platfroms_1.platforms[key];
-                    if (ch(element).length > 0) {
-                        data.name = key;
-                        break;
-                    }
-                }
+const axios_1 = __importDefault(require("axios")); // Assuming you have Axios for fetching the URL content
+const platforms_1 = require("./platforms");
+class PlatformDetector {
+    constructor(ch) {
+        this.ch = ch;
+    }
+    detectPlatform() {
+        for (const platformName of Object.keys(platforms_1.platforms)) {
+            const selector = platforms_1.platforms[platformName];
+            if (this.ch(selector).length > 0) {
+                return { name: platformName };
             }
-            resolve(data);
         }
-        catch (error) {
-            console.error("Error fetching HTML:", error);
-            reject(error);
-        }
-    });
+        return { name: "Other" };
+    }
+}
+async function getPlatformByCheerio(ch) {
+    try {
+        const platformDetector = new PlatformDetector(ch);
+        return platformDetector.detectPlatform();
+    }
+    catch (error) {
+        console.error("Error detecting platform:", error);
+        throw error;
+    }
 }
 exports.getPlatformByCheerio = getPlatformByCheerio;
-module.exports = {
-    getPlatformByUrl,
-    getPlatformByHtml,
-    getPlatformByCheerio,
-};
-//For testing
+async function getPlatformByHTML(html) {
+    try {
+        const ch = cheerio.load(html);
+        return getPlatformByCheerio(ch);
+    }
+    catch (error) {
+        console.error("Error getting platform from HTML:", error);
+        throw error;
+    }
+}
+exports.getPlatformByHTML = getPlatformByHTML;
+async function getPlatformByUrl(url) {
+    try {
+        const response = await axios_1.default.get(url);
+        const html = response.data;
+        const ch = cheerio.load(html);
+        return getPlatformByCheerio(ch);
+    }
+    catch (error) {
+        console.error("Error getting platform from URL:", error);
+        throw error;
+    }
+}
+exports.getPlatformByUrl = getPlatformByUrl;
+// For testing
 // (async () => {
-//   console.log(await getPlatformByUrl(`https://acedeckboards.ca`));
+//   console.log(await getPlatformByUrl('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
 // })();

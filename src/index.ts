@@ -58,6 +58,6 @@ export async function getPlatformByUrl(url: string): Promise<Platform> {
 }
 
 // For testing
-(async () => {
-  console.log(await getPlatformByUrl('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
-})();
+// (async () => {
+//   console.log(await getPlatformByUrl('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
+// })();
