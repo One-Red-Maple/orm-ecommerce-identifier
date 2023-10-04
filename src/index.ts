@@ -1,5 +1,5 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
+import axios from "axios";  // Assuming you have Axios for fetching the URL content
 import { platforms } from "./platforms";
 
 interface Platform {
@@ -7,18 +7,16 @@ interface Platform {
 }
 
 class PlatformDetector {
-  private html: string;
+  private ch: any;
 
-  constructor(html: string) {
-    this.html = html;
+  constructor(ch: any) {
+    this.ch = ch;
   }
 
   public detectPlatform(): Platform {
-    const ch = cheerio.load(this.html);
-
     for (const platformName of Object.keys(platforms)) {
       const selector: any = platforms[platformName as keyof typeof platforms];
-      if (ch(selector).length > 0) {
+      if (this.ch(selector).length > 0) {
         return { name: platformName as Platform["name"] };
       }
     }
@@ -27,24 +25,39 @@ class PlatformDetector {
   }
 }
 
-
-  const headers = {
-    'User-Agent': 'xyz',
-  };
-
-  export async function getPlatformByUrl(url: string): Promise<Platform> {
-    try {
-      const response = await axios.get(url, { headers });
-      const html = response.data;
-      const platformDetector = new PlatformDetector(html);
-      return platformDetector.detectPlatform();
-    } catch (error) {
-      console.error("Error fetching or parsing HTML:", error);
-      throw error;
+export async function getPlatformByCheerio(ch: any): Promise<Platform> {
+  try {
+    const platformDetector = new PlatformDetector(ch);
+    return platformDetector.detectPlatform();
+  } catch (error) {
+    console.error("Error detecting platform:", error);
+    throw error;
   }
 }
 
-// // For testing
-// (async () => {
-//   console.log(await getPlatformByUrl(`https://us.gosund.com/products/lenovo-xt80-bluetooth-5-3-earphones-true-wireless-headphones-with-mic-button-control-noise-reduction-earhooks-waterproof-headset-soav?spm=..collection_2aae9552-e414-4c4e-a1d0-bd58310de994.collection_detail_1.2&spm_prev=..index.header_1.1`));
-// })();
+export async function getPlatformByHTML(html: string): Promise<Platform> {
+  try {
+    const ch = cheerio.load(html);
+    return getPlatformByCheerio(ch);
+  } catch (error) {
+    console.error("Error getting platform from HTML:", error);
+    throw error;
+  }
+}
+
+export async function getPlatformByUrl(url: string): Promise<Platform> {
+  try {
+    const response = await axios.get(url);
+    const html = response.data;
+    const ch = cheerio.load(html);
+    return getPlatformByCheerio(ch);
+  } catch (error) {
+    console.error("Error getting platform from URL:", error);
+    throw error;
+  }
+}
+
+// For testing
+(async () => {
+  console.log(await getPlatformByUrl('https://holdit.com/produkt/mobilskal-silikon-red-velvet-iphone-15'));
+})();
