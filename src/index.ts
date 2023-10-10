@@ -10,7 +10,9 @@ interface platform {
 export async function getPlatformByUrl(url: string): Promise<platform> {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        timeout: 5000
+      });
       let html = response.data;
       let data = await getPlatformByHtml(html);
       resolve(data);

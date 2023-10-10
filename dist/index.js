@@ -34,7 +34,9 @@ const platfroms_1 = require("./platfroms");
 async function getPlatformByUrl(url) {
     return new Promise(async (resolve, reject) => {
         try {
-            const response = await axios_1.default.get(url);
+            const response = await axios_1.default.get(url, {
+                timeout: 5000
+            });
             let html = response.data;
             let data = await getPlatformByHtml(html);
             resolve(data);
