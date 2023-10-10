@@ -15,7 +15,6 @@ export async function getPlatformByUrl(url: string): Promise<platform> {
       let data = await getPlatformByHtml(html);
       resolve(data);
     } catch (err) {
-      console.error("Error fetching HTML:", err);
       reject(err);
     }
   });
@@ -29,7 +28,6 @@ export async function getPlatformByHtml(html: string): Promise<platform> {
       let data = await getPlatformByCheerio(ch);
       resolve(data);
     } catch (error) {
-      console.error("Error fetching HTML:", error);
       reject(error);
     }
   });
@@ -52,7 +50,6 @@ export function getPlatformByCheerio(ch: any): Promise<platform> {
       }
       resolve(data);
     } catch (error) {
-      console.error("Error fetching HTML:", error);
       reject(error);
     }
   });
