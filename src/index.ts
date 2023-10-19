@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { platforms } from "./platfroms";
+import { platforms } from "./platforms";
 
 interface platform {
   name: "Other" | "Bigcommerce" | "Ecwid" | "Lightspeed" | "Magento" | "Shopify" | "Square" | "Squarespace" | "Wix" | "WooCommerce" | "Shoplazza" | "Weebly" | "PrestaShop";
@@ -11,7 +11,7 @@ export async function getPlatformByUrl(url: string): Promise<platform> {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(url, {
-        timeout: 5000
+        timeout: 5000,
       });
       let html = response.data;
       let data = await getPlatformByHtml(html);

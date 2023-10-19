@@ -1,6 +1,6 @@
 {
   "name": "ecomm-identifier",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "NPM package that can identify what ecomm-platform a site is hosted on by its HTML content or URL",
   "main": "dist/index.js",
   "scripts": {
