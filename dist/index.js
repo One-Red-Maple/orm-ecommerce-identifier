@@ -29,13 +29,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPlatformByCheerio = exports.getPlatformByHtml = exports.getPlatformByUrl = void 0;
 const axios_1 = __importDefault(require("axios"));
 const cheerio = __importStar(require("cheerio"));
-const platfroms_1 = require("./platfroms");
+const platforms_1 = require("./platforms");
 // Get platform by url
 async function getPlatformByUrl(url) {
     return new Promise(async (resolve, reject) => {
         try {
             const response = await axios_1.default.get(url, {
-                timeout: 5000
+                timeout: 5000,
             });
             let html = response.data;
             let data = await getPlatformByHtml(html);
@@ -67,9 +67,9 @@ function getPlatformByCheerio(ch) {
             let data = {
                 name: "Other",
             };
-            for (const key in platfroms_1.platforms) {
-                if (Object.prototype.hasOwnProperty.call(platfroms_1.platforms, key)) {
-                    const element = platfroms_1.platforms[key];
+            for (const key in platforms_1.platforms) {
+                if (Object.prototype.hasOwnProperty.call(platforms_1.platforms, key)) {
+                    const element = platforms_1.platforms[key];
                     if (ch(element).length > 0) {
                         data.name = key;
                         break;
